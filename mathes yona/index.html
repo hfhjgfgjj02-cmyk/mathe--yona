@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HexaMath Quest — Cosmic Math Gym & Puzzle Dimension</title>
+  <!-- Google Fonts: Outfit (modern, geometric) and Fira Code (retro-tech math) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="An interactive math learning app featuring gamified streak mechanics, real-time animated conceptual diagrams, and a 6-axis hexagonal grid math puzzle.">
+</head>
+<body class="theme-dark">
+  <!-- Glowing background particles / mesh -->
+  <div class="bg-glow-container">
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="bg-glow glow-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar glass">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 100 100" width="36" height="36">
+            <polygon points="50,5 90,28 90,72 50,95 10,72 10,28" fill="none" stroke="var(--accent-cyan)" stroke-width="6" stroke-linejoin="round"/>
+            <circle cx="50" cy="50" r="15" fill="var(--accent-purple)"/>
+            <line x1="50" y1="5" x2="50" y2="95" stroke="var(--accent-cyan)" stroke-width="2" stroke-dasharray="4 4"/>
+            <line x1="10" y1="28" x2="90" y2="72" stroke="var(--accent-cyan)" stroke-width="2" stroke-dasharray="4 4"/>
+            <line x1="10" y1="72" x2="90" y2="28" stroke="var(--accent-cyan)" stroke-width="2" stroke-dasharray="4 4"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>HEXAMATH</h1>
+          <span>QUEST</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-btn active" data-tab="gym" id="btn-tab-gym">
+          <span class="btn-icon">⚡</span>
+          <span class="btn-text">Math Gym</span>
+        </button>
+        <button class="nav-btn" data-tab="puzzle" id="btn-tab-puzzle">
+          <span class="btn-icon">⬡</span>
+          <span class="btn-text">Hexa-Axis Grid</span>
+        </button>
+        <button class="nav-btn" data-tab="stats" id="btn-tab-stats">
+          <span class="btn-icon">🕸️</span>
+          <span class="btn-text">Cognitive Web</span>
+        </button>
+      </nav>
+
+      <div class="user-card glass">
+        <div class="user-avatar">
+          <span class="avatar-emoji">🧑‍🚀</span>
+        </div>
+        <div class="user-info">
+          <div class="username" id="label-username">Star Cadet</div>
+          <div class="user-rank" id="label-rank">Level 1 Novice</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Bar: Scores, Streaks, Overdrive status -->
+      <header class="topbar glass">
+        <div class="topbar-left">
+          <div class="stats-pill glass" id="pill-level">
+            <span class="pill-label">RANK:</span>
+            <span class="pill-value text-glow-cyan" id="val-level">1</span>
+          </div>
+          <div class="stats-pill glass" id="pill-score">
+            <span class="pill-label">XP:</span>
+            <span class="pill-value text-glow-purple" id="val-score">0000</span>
+          </div>
+        </div>
+
+        <!-- STREAK TRACKER - VERY IMPORTANT FOR "GET MORE CRITICAL" -->
+        <div class="streak-tracker glass" id="container-streak">
+          <div class="flame-icon" id="streak-flame">🔥</div>
+          <div class="streak-info">
+            <div class="streak-title">STREAK</div>
+            <div class="streak-count" id="val-streak">0</div>
+          </div>
+          <div class="multiplier-tag" id="val-multiplier">1.0x</div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="audio-toggle-btn glass" id="btn-audio-toggle" title="Toggle Sound FX">
+            <span id="audio-icon">🔊</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- TAB 1: MATH GYM -->
+      <section class="tab-content active" id="tab-gym">
+        <div class="gym-layout">
+          <!-- Left Column: Math Arena -->
+          <div class="gym-arena glass">
+            <div class="arena-header">
+              <h2>MATH GYM CHALLENGE</h2>
+              <span class="difficulty-indicator text-glow-cyan" id="val-difficulty">Difficulty: Easy</span>
+            </div>
+
+            <!-- Glowing equation card -->
+            <div class="equation-container glass-glow" id="equation-card">
+              <div class="countdown-bar-container" id="timer-wrapper" style="opacity: 0;">
+                <div class="countdown-bar" id="timer-bar"></div>
+              </div>
+              <div class="equation" id="display-equation">
+                <span class="num first-num">5</span>
+                <span class="op">+</span>
+                <span class="num second-num">3</span>
+                <span class="equals">=</span>
+                <span class="answer-box">
+                  <input type="text" id="input-answer" placeholder="?" autocomplete="off" inputmode="numeric">
+                </span>
+              </div>
+            </div>
+
+            <!-- Virtual Numpad & Submit -->
+            <div class="interaction-zone">
+              <div class="numpad">
+                <button class="numpad-btn" data-val="1">1</button>
+                <button class="numpad-btn" data-val="2">2</button>
+                <button class="numpad-btn" data-val="3">3</button>
+                <button class="numpad-btn" data-val="4">4</button>
+                <button class="numpad-btn" data-val="5">5</button>
+                <button class="numpad-btn" data-val="6">6</button>
+                <button class="numpad-btn" data-val="7">7</button>
+                <button class="numpad-btn" data-val="8">8</button>
+                <button class="numpad-btn" data-val="9">9</button>
+                <button class="numpad-btn text-btn" data-val="clear">CLEAR</button>
+                <button class="numpad-btn" data-val="0">0</button>
+                <button class="numpad-btn text-btn" data-val="negative" id="btn-numpad-neg">-</button>
+              </div>
+
+              <div class="action-buttons">
+                <button class="submit-btn" id="btn-submit-answer">
+                  <span class="btn-glow-wrapper">
+                    <span class="btn-glow-bg"></span>
+                  </span>
+                  SUBMIT ANSWER
+                </button>
+              </div>
+            </div>
+
+            <!-- Arithmetic Filter Category Tabs -->
+            <div class="operation-filter glass">
+              <button class="op-pill active" data-op="all" id="pill-op-all">All Operations</button>
+              <button class="op-pill" data-op="add" id="pill-op-add">Addition (+)</button>
+              <button class="op-pill" data-op="sub" id="pill-op-sub">Subtraction (-)</button>
+              <button class="op-pill" data-op="mul" id="pill-op-mul">Multiplication (×)</button>
+              <button class="op-pill" data-op="div" id="pill-op-div">Division (÷)</button>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Conceptual Diagram (Fulfill Animated Diagram requirement) -->
+          <div class="gym-visualizer-card glass">
+            <div class="visualizer-header">
+              <h3>DYNAMIC CONCEPT DIAGRAM</h3>
+              <p>Visual explanation of the active problem</p>
+            </div>
+            <div class="visualizer-canvas-container" id="canvas-container-visualizer">
+              <canvas id="canvas-visualizer"></canvas>
+            </div>
+            <div class="visualizer-explanation" id="display-explanation-text">
+              Five items combined with three items makes eight items in total.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: HEXA-AXIS PORTAL PUZZLE (Fulfill 6 axis puzzles requirement) -->
+      <section class="tab-content" id="tab-puzzle">
+        <div class="puzzle-layout">
+          <!-- Left Column: Hex Grid Pathfinder Game -->
+          <div class="puzzle-arena glass">
+            <div class="puzzle-arena-header">
+              <div class="title-section">
+                <h2>HEXA-AXIS PORTAL</h2>
+                <p>Navigate the core along 6 axes to match the target math sequence!</p>
+              </div>
+              <div class="target-card glass">
+                <div class="target-label">TARGET SUM</div>
+                <div class="target-value text-glow-cyan" id="val-puzzle-target">24</div>
+                <div class="current-value" id="val-puzzle-current">Current: 0</div>
+              </div>
+            </div>
+
+            <!-- Puzzle canvas -->
+            <div class="puzzle-canvas-wrapper" id="canvas-container-puzzle">
+              <canvas id="canvas-puzzle"></canvas>
+            </div>
+
+            <!-- 6 Axis Compass Controls -->
+            <div class="compass-controls-wrapper">
+              <div class="compass-title">6-AXIS COMPASS MOVEMENT</div>
+              <div class="compass-grid">
+                <button class="compass-btn" data-dir="nw" title="Axis 5: North-West (240°)">↖ NW</button>
+                <button class="compass-btn" data-dir="ne" title="Axis 6: North-East (300°)">↗ NE</button>
+                <button class="compass-btn" data-dir="w" title="Axis 4: West (180°)">← W</button>
+                <button class="compass-btn disabled" disabled style="visibility: hidden;"></button>
+                <button class="compass-btn" data-dir="e" title="Axis 1: East (0°)">E →</button>
+                <button class="compass-btn" data-dir="sw" title="Axis 3: South-West (120°)">↙ SW</button>
+                <button class="compass-btn" data-dir="se" title="Axis 2: South-East (60°)">↘ SE</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Puzzle Levels and Axis Overview -->
+          <div class="puzzle-sidebar glass">
+            <div class="level-select-container">
+              <h3>CHOOSE PORTAL SECTOR</h3>
+              <div class="level-grid" id="grid-levels">
+                <!-- Dynamically generated levels -->
+              </div>
+            </div>
+
+            <div class="axis-guide glass">
+              <h3>6 AXES REFERENCE</h3>
+              <div class="axis-list">
+                <div class="axis-item">
+                  <span class="axis-tag text-glow-cyan">Axis 1 & 4</span>
+                  <span class="axis-desc">Horizontal Axis (East / West)</span>
+                </div>
+                <div class="axis-item">
+                  <span class="axis-tag text-glow-purple">Axis 2 & 5</span>
+                  <span class="axis-desc">Diagonal Forward (SE / NW)</span>
+                </div>
+                <div class="axis-item">
+                  <span class="axis-tag text-glow-pink">Axis 3 & 6</span>
+                  <span class="axis-desc">Diagonal Reverse (SW / NE)</span>
+                </div>
+              </div>
+            </div>
+
+            <button class="submit-btn full-width" id="btn-reset-puzzle">
+              RESET CURRENT PORTAL
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: COGNITIVE WEB (STATS) -->
+      <section class="tab-content" id="tab-stats">
+        <div class="stats-layout glass">
+          <div class="stats-header">
+            <h2>COGNITIVE STRENGTH WEB</h2>
+            <p>Your mathematical development profile analyzed in 6 dimensions</p>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stats-chart-card glass">
+              <canvas id="canvas-stats-radar"></canvas>
+            </div>
+
+            <div class="stats-details-card glass">
+              <h3>COGNITIVE DIAGNOSIS</h3>
+              <div class="stat-bars-container" id="container-stat-bars">
+                <!-- Dynamically filled with premium progress bars -->
+              </div>
+              <div class="motivational-card glass-glow">
+                <span class="card-emoji">🏆</span>
+                <div class="card-message">
+                  <h4>STREAK MULTIPLIER ACTIVE!</h4>
+                  <p id="label-stats-motivation">Keep practicing in the Math Gym to increase your Rank and unlock the ultimate portals.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Win/Lose Overlay modal -->
+  <div class="modal-overlay" id="modal-screen" style="display: none;">
+    <div class="modal-card glass-glow">
+      <div class="modal-header-icon" id="modal-icon">🎉</div>
+      <h2 class="modal-title text-glow-cyan" id="modal-title">PORTAL DECRYPTION SUCCESSFUL!</h2>
+      <div class="modal-body" id="modal-body">
+        You successfully matched the target sequence and powered up the grid!
+      </div>
+      <div class="modal-footer">
+        <button class="submit-btn" id="btn-modal-action">PROCEED</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="audio.js"></script>
+  <script src="visualizer.js"></script>
+  <script src="puzzle.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
